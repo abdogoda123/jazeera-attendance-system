@@ -6,6 +6,10 @@
   <title>نظام الحضور الذكي - معهد الجزيرة العالي للهندسة والتكنولوجيا</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <!-- مكتبة مسح الـ QR Code -->
+  <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+  <!-- مكتبة تصدير PDF احترافي -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
   <style> body { font-family: 'Cairo', sans-serif; } </style>
 </head>
@@ -54,56 +58,80 @@
         تسجيل الدخول 🚀
       </button>
 
-      <div class="text-center pt-3 border-t mt-4">
+      <div class="text-center pt-3 border-t mt-4 space-y-2">
         <p class="text-xs text-slate-600">ليس لديك حساب على هذا الهاتف؟ 
           <button onclick="toggleRegisterMode(true)" class="text-[#0088cc] font-bold hover:underline">انشئ حسابك الجديد الآن</button>
         </p>
+        <button onclick="resetDeviceData()" class="text-[11px] text-red-500 hover:underline block mx-auto">🗑️ مسح الذاكرة المسجلة (لإعادة التسجيل من جديد)</button>
       </div>
     </div>
   </section>
 
-  <!-- 2. REGISTER PANEL (SELF-SERVICE) -->
+  <!-- 2. REGISTER PANEL (WITH DEPT & LEVEL) -->
   <section id="panel-register" class="max-w-md mx-auto bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl p-6 md:p-8 border border-white hidden">
     <div class="text-center mb-6">
       <div class="inline-block p-3 bg-emerald-50 text-emerald-600 rounded-full mb-2 text-2xl shadow-inner">📝</div>
       <h3 class="text-xl font-bold text-slate-800">إنشاء حساب جديد (تسجيل لأول مرة)</h3>
-      <p class="text-xs text-slate-500 mt-1">سيتم ربط هذا الحساب باسمك وجهازك نهائياً</p>
+      <p class="text-xs text-slate-500 mt-1">أدخل بياناتك كاملة لترتبط بحسابك وجهازك نهائياً</p>
     </div>
     
-    <div class="space-y-4">
+    <div class="space-y-3">
       <div>
-        <label class="block text-xs font-bold text-slate-700 mb-1">حدد صفحتك / صفتك</label>
-        <select id="reg-role" onchange="toggleRoleFields()" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-[#0088cc] text-sm bg-slate-50/50">
-          <option value="student">طالب (منظومة الحضور للدفعة)</option>
+        <label class="block text-xs font-bold text-slate-700 mb-1">حدد صفتك</label>
+        <select id="reg-role" onchange="toggleRoleFields()" class="w-full px-3 py-2 rounded-xl border border-slate-300 focus:ring-2 focus:ring-[#0088cc] text-xs bg-slate-50/50">
+          <option value="student">طالب (منظومة الحضور)</option>
           <option value="doctor">عضو هيئة تدريس / دكتور</option>
         </select>
       </div>
 
       <div>
         <label class="block text-xs font-bold text-slate-700 mb-1">الاسم الثلاثي / الرباعي الرسمي</label>
-        <input type="text" id="reg-fullname" placeholder="اكتب اسمك كاملاً" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-[#0088cc] text-sm bg-slate-50/50">
+        <input type="text" id="reg-fullname" placeholder="مثال: عبدالرحمن جودة منصور محمد" class="w-full px-3 py-2 rounded-xl border border-slate-300 focus:ring-2 focus:ring-[#0088cc] text-xs bg-slate-50/50">
       </div>
 
+      <!-- حقول خاصة بالطالب: القسم والمستوى -->
+      <div id="student-extra-fields" class="space-y-3">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">القسم / التخصص الهندسي</label>
+          <select id="reg-dept" class="w-full px-3 py-2 rounded-xl border border-slate-300 focus:ring-2 focus:ring-[#0088cc] text-xs bg-slate-50/50">
+            <option value="هندسة الإلكترونيات والاتصالات">هندسة الإلكترونيات والاتصالات</option>
+            <option value="الهندسة المدنية">الهندسة المدنية</option>
+            <option value="هندسة العمارة">هندسة العمارة</option>
+            <option value="هندسة الميكاترونكس">هندسة الميكاترونكس</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">المستوى الدراسي / الفرقة</label>
+          <select id="reg-level" class="w-full px-3 py-2 rounded-xl border border-slate-300 focus:ring-2 focus:ring-[#0088cc] text-xs bg-slate-50/50">
+            <option value="المستوى الثالث (3/2)">المستوى الثالث (3/2)</option>
+            <option value="المستوى الأول">المستوى الأول</option>
+            <option value="المستوى الثاني">المستوى الثاني</option>
+            <option value="المستوى الرابع">المستوى الرابع</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- حقل خاص بالدكتور: اسم المادة -->
       <div id="field-subject" class="hidden">
-        <label class="block text-xs font-bold text-slate-700 mb-1">اسم المادة الدراسية (للدكتور)</label>
-        <input type="text" id="reg-subject" placeholder="مثال: تحليل متجهات / خرسانة مسلحة" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-[#0088cc] text-sm bg-slate-50/50">
+        <label class="block text-xs font-bold text-slate-700 mb-1">اسم المادة الدراسية</label>
+        <input type="text" id="reg-subject" placeholder="مثال: رياضيات 3 (Math 3)" class="w-full px-3 py-2 rounded-xl border border-slate-300 focus:ring-2 focus:ring-[#0088cc] text-xs bg-slate-50/50">
       </div>
 
       <div>
-        <label class="block text-xs font-bold text-slate-700 mb-1">اختر كود أكاديمي خاص بك (ID)</label>
-        <input type="text" id="reg-username" placeholder="مثال: 26271 أو أي كود تختاره" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-[#0088cc] text-sm bg-slate-50/50">
+        <label class="block text-xs font-bold text-slate-700 mb-1">الكود الأكاديمي (ID)</label>
+        <input type="text" id="reg-username" placeholder="مثال: 202401928" class="w-full px-3 py-2 rounded-xl border border-slate-300 focus:ring-2 focus:ring-[#0088cc] text-xs bg-slate-50/50">
       </div>
 
       <div>
-        <label class="block text-xs font-bold text-slate-700 mb-1">أنشئ كلمة مرور خاصة بك (Password)</label>
-        <input type="password" id="reg-password" placeholder="••••••••" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-[#0088cc] text-sm bg-slate-50/50">
+        <label class="block text-xs font-bold text-slate-700 mb-1">كلمة المرور (Password)</label>
+        <input type="password" id="reg-password" placeholder="••••••••" class="w-full px-3 py-2 rounded-xl border border-slate-300 focus:ring-2 focus:ring-[#0088cc] text-xs bg-slate-50/50">
       </div>
 
-      <button onclick="registerUser()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-3.5 rounded-xl font-bold shadow-lg transition text-sm">
+      <button onclick="registerUser()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-3 rounded-xl font-bold shadow-lg transition text-xs">
         إنشاء الحساب وقفل الجهاز 🔒
       </button>
 
-      <div class="text-center pt-3 border-t mt-4">
+      <div class="text-center pt-2 border-t mt-3">
         <p class="text-xs text-slate-600">لديك حساب بالفعل؟ 
           <button onclick="toggleRegisterMode(false)" class="text-[#0088cc] font-bold hover:underline">تسجيل الدخول</button>
         </p>
@@ -125,31 +153,47 @@
       <div class="flex items-center gap-3 mb-6 pb-3 border-b">
         <span class="text-2xl">👤</span>
         <div>
-          <h3 class="text-lg font-bold text-slate-800">تسجيل حضور الطالب</h3>
+          <h3 class="text-lg font-bold text-slate-800">بيانات الطالب الأكاديمية</h3>
           <p class="text-xs text-slate-500">معهد الجزيرة العالي للهندسة والتكنولوجيا</p>
         </div>
       </div>
 
       <div class="space-y-4">
         <div>
-          <label class="block text-xs font-bold text-slate-700 mb-1">اسم الطالب المسجل</label>
+          <label class="block text-xs font-bold text-slate-700 mb-1">الاسم الرباعي</label>
           <input type="text" id="st-fullname" class="w-full px-4 py-2.5 rounded-xl border bg-slate-50 text-slate-800 font-bold text-sm" readonly>
         </div>
 
         <div class="grid grid-cols-2 gap-4">
           <div>
-            <label class="block text-xs font-bold text-slate-700 mb-1">الكود الأكاديمي المربوط بالجهاز</label>
+            <label class="block text-xs font-bold text-slate-700 mb-1">الكود الأكاديمي</label>
             <input type="text" id="st-id" class="w-full px-4 py-2.5 rounded-xl border bg-slate-50 text-slate-800 font-mono font-bold text-sm" readonly>
           </div>
           <div>
-            <label class="block text-xs font-bold text-slate-700 mb-1">الحالة الأكاديمية</label>
-            <input type="text" id="st-batch" value="حساب نشط وموثق" class="w-full px-4 py-2.5 rounded-xl border bg-slate-50 text-slate-800 font-bold text-sm" readonly>
+            <label class="block text-xs font-bold text-slate-700 mb-1">المستوى الدراسي</label>
+            <input type="text" id="st-level" class="w-full px-4 py-2.5 rounded-xl border bg-slate-50 text-slate-800 font-bold text-sm" readonly>
           </div>
         </div>
 
-        <div class="pt-4">
-          <button onclick="scanQR()" class="w-full bg-[#0088cc] hover:bg-[#0077bb] text-white py-3.5 rounded-xl font-bold shadow-lg flex items-center justify-center gap-2 transition text-sm">
-            <span>📷</span> فتح الكاميرا ومسح الـ QR Code الخاص بالدكتور
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">القسم / التخصص</label>
+          <input type="text" id="st-dept" class="w-full px-4 py-2.5 rounded-xl border bg-slate-50 text-slate-800 font-bold text-sm" readonly>
+        </div>
+
+        <!-- CAMERA SCANNER CONTAINER -->
+        <div id="scanner-container" class="hidden border-2 border-dashed border-[#0088cc] rounded-2xl p-4 bg-slate-50 text-center">
+          <p class="text-xs font-bold text-slate-700 mb-2">📷 توجيه الكاميرا لمسح كود المحاضرة:</p>
+          <div id="reader" class="overflow-hidden rounded-xl"></div>
+          <button onclick="stopCamera()" class="mt-3 px-4 py-1.5 bg-red-100 text-red-600 rounded-lg text-xs font-bold">إغلاق الكاميرا ✖</button>
+        </div>
+
+        <div class="pt-2 space-y-3">
+          <button onclick="startCamera()" id="btn-open-camera" class="w-full bg-[#0088cc] hover:bg-[#0077bb] text-white py-3.5 rounded-xl font-bold shadow-lg flex items-center justify-center gap-2 transition text-sm">
+            <span>📷</span> فتح الكاميرا ومسح الـ QR Code الخاص بالمحاضرة
+          </button>
+          
+          <button onclick="downloadPDFReport()" class="w-full bg-slate-800 hover:bg-slate-900 text-white py-3 rounded-xl font-bold shadow flex items-center justify-center gap-2 transition text-xs">
+            <span>📄</span> تحميل شهادة الحضور الرسمية (PDF)
           </button>
         </div>
       </div>
@@ -187,10 +231,42 @@
         </div>
       </div>
 
-      <button onclick="exportExcel()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-3.5 rounded-xl font-bold shadow-lg flex items-center justify-center gap-2 transition text-sm">
-        <span>📥</span> تصدير كشف الحضور الرسمي (Excel)
-      </button>
+      <!-- EXPORT & WHATSAPP SECTION -->
+      <div class="space-y-3 border-t pt-4">
+        <button onclick="exportExcel()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-3 rounded-xl font-bold shadow flex items-center justify-center gap-2 transition text-sm">
+          <span>📊</span> تصدير كشف الحضور الرسمي (Excel / CSV)
+        </button>
+
+        <div class="bg-slate-50 p-4 rounded-xl border space-y-2">
+          <label class="block text-xs font-bold text-slate-700">📱 إرسال كشف الحضور المباشر عبر واتساب (WhatsApp):</label>
+          <div class="flex gap-2">
+            <input type="text" id="whatsapp-num" placeholder="رقم الواتساب (مثال: 010xxxxxxxx)" class="flex-1 px-3 py-2 border rounded-xl text-xs bg-white">
+            <button onclick="sendToWhatsApp()" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-1 shadow">
+              <span>💬</span> إرسال
+            </button>
+          </div>
+        </div>
+      </div>
     </main>
+  </div>
+
+  <!-- HIDDEN PDF TEMPLATE -->
+  <div id="pdf-template" class="hidden p-8 bg-white text-right max-w-lg mx-auto border-4 border-[#0088cc]">
+    <div class="text-center border-b pb-4 mb-4">
+      <h2 class="text-lg font-black text-[#0088cc]">معهد الجزيرة العالي للهندسة والتكنولوجيا</h2>
+      <p class="text-xs text-slate-600">منظومة الحضور الرقمية - رؤية مصر 2030</p>
+    </div>
+    <h3 class="text-center font-bold text-base mb-4 bg-slate-100 py-2 rounded">شهادة إثبات حضور محاضرة أكاديمية</h3>
+    <div class="space-y-3 text-sm">
+      <p><strong>اسم الطالب:</strong> <span id="pdf-name">--</span></p>
+      <p><strong>الكود الأكاديمي:</strong> <span id="pdf-id">--</span></p>
+      <p><strong>القسم / التخصص:</strong> <span id="pdf-dept">--</span></p>
+      <p><strong>المستوى الدراسي:</strong> <span id="pdf-level">--</span></p>
+      <p><strong>وقت تسجيل الحضور:</strong> <span id="pdf-time">--</span></p>
+    </div>
+    <div class="mt-8 pt-4 border-t text-center text-xs text-slate-500">
+      تم اعتماد هذا المستند إلكترونياً من نظام الحضور الذكي بالمعهد.
+    </div>
   </div>
 
   <script>
@@ -207,6 +283,17 @@
     let currentUser = null;
     let userRole = null;
     let qrGenerator = null;
+    let html5QrCode = null;
+
+    let attendanceList = JSON.parse(localStorage.getItem('egi_session_attendance') || '[]');
+
+    function resetDeviceData() {
+      if (confirm("هل تريد حقاً مسح البيانات المخزنة على هذا الجهاز لإعادة تسجيل حساب جديد؟")) {
+        localStorage.clear();
+        alert("تم مسح الذاكرة بنجاح. أعد تحميل الصفحة للتسجيل من جديد.");
+        location.reload();
+      }
+    }
 
     function toggleRegisterMode(showRegister) {
       if (showRegister) {
@@ -221,34 +308,32 @@
     function toggleRoleFields() {
       const role = document.getElementById('reg-role').value;
       const subField = document.getElementById('field-subject');
+      const studentFields = document.getElementById('student-extra-fields');
       if (role === 'doctor') {
         subField.classList.remove('hidden');
+        studentFields.classList.add('hidden');
       } else {
         subField.classList.add('hidden');
+        studentFields.classList.remove('hidden');
       }
     }
 
-    // تسجيل حساب جديد بنفسه
     function registerUser() {
       const role = document.getElementById('reg-role').value;
       const name = document.getElementById('reg-fullname').value.trim();
       const u = document.getElementById('reg-username').value.trim();
       const p = document.getElementById('reg-password').value.trim();
+      const dept = document.getElementById('reg-dept').value;
+      const level = document.getElementById('reg-level').value;
       const subject = document.getElementById('reg-subject').value.trim();
 
       if (!name || !u || !p) {
-        alert("يرجى ملء جميع الحقول المطلوبة لإنشاء الحساب.");
+        alert("يرجى ملء جميع الحقول المطلوبة.");
         return;
       }
 
-      if (role === 'doctor' && !subject) {
-        alert("يرجى كتابة اسم المادة الدراسية الخاصة بك.");
-        return;
-      }
-
-      // التأكد أن الكود مش مستخدم قبل كده
       if (localStorage.getItem('egi_acc_' + u)) {
-        alert("❌ هذا الكود الأكاديمي مستخدم مسبقاً! اختر كوداً آخر.");
+        alert("❌ هذا الكود الأكاديمي مسجل مسبقاً لشخص آخر!");
         return;
       }
 
@@ -257,21 +342,20 @@
         password: p,
         name: name,
         role: role,
-        subject: subject || "مادة أكاديمية",
+        dept: dept || "هندسة الإلكترونيات والاتصالات",
+        level: level || "المستوى الثالث (3/2)",
+        subject: subject || "رياضيات 3 (Math 3)",
         deviceId: currentDeviceId
       };
 
-      // حفظ الحساب بشكل دائم ومقفل على الجهاز
       localStorage.setItem('egi_acc_' + u, JSON.stringify(newAccount));
-      
-      alert("🎉 تم إنشاء حسابك بنجاح وقفله على هاتفك الحالي يا بشمهندس " + name + "!");
+      alert("🎉 تم إنشاء حسابك بنجاح وقفل جهازه يا بشمهندس " + name + "!");
       
       currentUser = newAccount;
       userRole = role;
       setupDashboard();
     }
 
-    // تسجيل الدخول العادي
     function loginUser() {
       const u = document.getElementById('login-username').value.trim();
       const p = document.getElementById('login-password').value.trim();
@@ -284,7 +368,7 @@
       const registeredData = localStorage.getItem('egi_acc_' + u);
 
       if (!registeredData) {
-        alert("❌ هذا الكود غير مسجل على النظام! يرجى إنشاء حساب جديد أولاً.");
+        alert("❌ هذا الكود غير مسجل! يرجى إنشاء حساب جديد أولاً.");
         return;
       }
 
@@ -309,70 +393,3 @@
       document.getElementById('panel-login').classList.add('hidden');
       document.getElementById('panel-register').classList.add('hidden');
       document.getElementById('panel-dashboard').classList.remove('hidden');
-
-      if (userRole === 'doctor') {
-        document.getElementById('user-display').innerText = currentUser.name + " (" + currentUser.subject + ")";
-        document.getElementById('doc-fullname').innerText = "شاشة الدكتور: " + currentUser.name;
-        document.getElementById('doc-subject').innerText = currentUser.subject;
-        switchView('doctor');
-      } else {
-        document.getElementById('user-display').innerText = currentUser.name;
-        document.getElementById('st-fullname').value = currentUser.name;
-        document.getElementById('st-id').value = currentUser.id;
-        switchView('student');
-      }
-    }
-
-    function logoutUser() {
-      document.getElementById('panel-dashboard').classList.add('hidden');
-      document.getElementById('panel-login').classList.remove('hidden');
-      currentUser = null;
-      userRole = null;
-    }
-
-    function switchView(viewId) {
-      document.getElementById('view-student').classList.add('hidden');
-      document.getElementById('view-doctor').classList.add('hidden');
-      document.getElementById('view-' + viewId).classList.remove('hidden');
-
-      if (viewId === 'doctor') {
-        initQR();
-      }
-    }
-
-    function initQR() {
-      const qrel = document.getElementById("qrcode");
-      qrel.innerHTML = "";
-      qrGenerator = new QRCode(qrel, {
-        text: "https://abdogoda123.github.io/jazeera-attendance-system/?code=" + Math.random(),
-        width: 160,
-        height: 160
-      });
-    }
-
-    function scanQR() {
-      alert("تم تسجيل الحضور بنجاح لـ (" + currentUser.name + ") داخل الحرم الأكاديمي! 🎉");
-    }
-
-    function exportExcel() {
-      alert("تم تصدير كشف الحضور بنجاح بصيغة Excel!");
-    }
-
-    let timeLeft = 5;
-    setInterval(() => {
-      timeLeft--;
-      if (timeLeft < 1) {
-        timeLeft = 5;
-        if (qrGenerator) {
-          const newToken = "EGI-2030-" + Math.floor(1000 + Math.random() * 9000);
-          qrGenerator.makeCode("https://abdogoda123.github.io/jazeera-attendance-system/?token=" + newToken);
-          const txt = document.getElementById('qr-text-code');
-          if (txt) txt.innerText = "رمز الأمان التفاعلي: " + newToken;
-        }
-      }
-      const timerEl = document.getElementById('timer');
-      if (timerEl) timerEl.innerText = timeLeft;
-    }, 1000);
-  </script>
-</body>
-</html>
