@@ -36,64 +36,33 @@
     </div>
   </header>
 
-  <!-- 1. LOGIN PANEL -->
-  <section id="panel-login" class="max-w-md mx-auto bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl p-6 md:p-8 border border-white">
+  <!-- SINGLE CLEAN LOGIN / REGISTER PANEL -->
+  <section id="panel-auth" class="max-w-md mx-auto bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl p-6 md:p-8 border border-white">
     <div class="text-center mb-6">
       <div class="inline-block p-3 bg-blue-50 text-[#0088cc] rounded-full mb-2 text-2xl shadow-inner">🔐</div>
-      <h3 class="text-xl font-bold text-slate-800">تسجيل الدخول للنظام الأكاديمي</h3>
-      <p class="text-xs text-slate-500 mt-1">أدخل كودك الأكاديمي وكلمة المرور الخاصة بك</p>
-    </div>
-    
-    <div class="space-y-4">
-      <div>
-        <label class="block text-xs font-bold text-slate-700 mb-1">الكود الأكاديمي / اسم المستخدم</label>
-        <input type="text" id="login-username" placeholder="أدخل الكود الخاص بك" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-[#0088cc] text-sm bg-slate-50/50">
-      </div>
-      <div>
-        <label class="block text-xs font-bold text-slate-700 mb-1">كلمة المرور (Password)</label>
-        <input type="password" id="login-password" placeholder="••••••••" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-[#0088cc] text-sm bg-slate-50/50">
-      </div>
-
-      <button onclick="loginUser()" class="w-full bg-[#0088cc] hover:bg-[#0077bb] text-white py-3.5 rounded-xl font-bold shadow-lg transition text-sm">
-        تسجيل الدخول 🚀
-      </button>
-
-      <div class="text-center pt-3 border-t mt-4 space-y-2">
-        <p class="text-xs text-slate-600">ليس لديك حساب على هذا الهاتف؟ 
-          <button onclick="toggleRegisterMode(true)" class="text-[#0088cc] font-bold hover:underline">انشئ حسابك الجديد الآن</button>
-        </p>
-        <button onclick="resetDeviceData()" class="text-[11px] text-red-500 hover:underline block mx-auto">🗑️ مسح الذاكرة المسجلة (لإعادة التسجيل من جديد)</button>
-      </div>
-    </div>
-  </section>
-
-  <!-- 2. REGISTER PANEL (WITH DEPT & LEVEL) -->
-  <section id="panel-register" class="max-w-md mx-auto bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl p-6 md:p-8 border border-white hidden">
-    <div class="text-center mb-6">
-      <div class="inline-block p-3 bg-emerald-50 text-emerald-600 rounded-full mb-2 text-2xl shadow-inner">📝</div>
-      <h3 class="text-xl font-bold text-slate-800">إنشاء حساب جديد (تسجيل لأول مرة)</h3>
-      <p class="text-xs text-slate-500 mt-1">أدخل بياناتك كاملة لترتبط بحسابك وجهازك نهائياً</p>
+      <h3 class="text-xl font-bold text-slate-800">بوابة الدخول والتحقق الأكاديمي</h3>
+      <p class="text-xs text-slate-500 mt-1">سجل بياناتك لأول مرة لترتبط بجهازك وحسابك نهائياً</p>
     </div>
     
     <div class="space-y-3">
       <div>
-        <label class="block text-xs font-bold text-slate-700 mb-1">حدد صفتك</label>
-        <select id="reg-role" onchange="toggleRoleFields()" class="w-full px-3 py-2 rounded-xl border border-slate-300 focus:ring-2 focus:ring-[#0088cc] text-xs bg-slate-50/50">
-          <option value="student">طالب (منظومة الحضور)</option>
+        <label class="block text-xs font-bold text-slate-700 mb-1">اختر صفتك</label>
+        <select id="auth-role" onchange="toggleRoleFields()" class="w-full px-3 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-[#0088cc] text-xs bg-slate-50/50">
+          <option value="student">طالب (تسجيل حضور)</option>
           <option value="doctor">عضو هيئة تدريس / دكتور</option>
         </select>
       </div>
 
       <div>
         <label class="block text-xs font-bold text-slate-700 mb-1">الاسم الثلاثي / الرباعي الرسمي</label>
-        <input type="text" id="reg-fullname" placeholder="مثال: عبدالرحمن جودة منصور محمد" class="w-full px-3 py-2 rounded-xl border border-slate-300 focus:ring-2 focus:ring-[#0088cc] text-xs bg-slate-50/50">
+        <input type="text" id="auth-fullname" placeholder="مثال: عبدالرحمن جودة منصور محمد" class="w-full px-3 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-[#0088cc] text-xs bg-slate-50/50">
       </div>
 
-      <!-- حقول خاصة بالطالب: القسم والمستوى -->
-      <div id="student-extra-fields" class="space-y-3">
+      <!-- حقول الطالب -->
+      <div id="student-fields" class="space-y-3">
         <div>
           <label class="block text-xs font-bold text-slate-700 mb-1">القسم / التخصص الهندسي</label>
-          <select id="reg-dept" class="w-full px-3 py-2 rounded-xl border border-slate-300 focus:ring-2 focus:ring-[#0088cc] text-xs bg-slate-50/50">
+          <select id="auth-dept" class="w-full px-3 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-[#0088cc] text-xs bg-slate-50/50">
             <option value="هندسة الإلكترونيات والاتصالات">هندسة الإلكترونيات والاتصالات</option>
             <option value="الهندسة المدنية">الهندسة المدنية</option>
             <option value="هندسة العمارة">هندسة العمارة</option>
@@ -102,7 +71,7 @@
         </div>
         <div>
           <label class="block text-xs font-bold text-slate-700 mb-1">المستوى الدراسي / الفرقة</label>
-          <select id="reg-level" class="w-full px-3 py-2 rounded-xl border border-slate-300 focus:ring-2 focus:ring-[#0088cc] text-xs bg-slate-50/50">
+          <select id="auth-level" class="w-full px-3 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-[#0088cc] text-xs bg-slate-50/50">
             <option value="المستوى الثالث (3/2)">المستوى الثالث (3/2)</option>
             <option value="المستوى الأول">المستوى الأول</option>
             <option value="المستوى الثاني">المستوى الثاني</option>
@@ -111,30 +80,28 @@
         </div>
       </div>
 
-      <!-- حقل خاص بالدكتور: اسم المادة -->
-      <div id="field-subject" class="hidden">
+      <!-- حقل الدكتور -->
+      <div id="doctor-fields" class="hidden">
         <label class="block text-xs font-bold text-slate-700 mb-1">اسم المادة الدراسية</label>
-        <input type="text" id="reg-subject" placeholder="مثال: رياضيات 3 (Math 3)" class="w-full px-3 py-2 rounded-xl border border-slate-300 focus:ring-2 focus:ring-[#0088cc] text-xs bg-slate-50/50">
+        <input type="text" id="auth-subject" placeholder="مثال: رياضيات 3 (Math 3)" class="w-full px-3 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-[#0088cc] text-xs bg-slate-50/50">
       </div>
 
       <div>
         <label class="block text-xs font-bold text-slate-700 mb-1">الكود الأكاديمي (ID)</label>
-        <input type="text" id="reg-username" placeholder="مثال: 202401928" class="w-full px-3 py-2 rounded-xl border border-slate-300 focus:ring-2 focus:ring-[#0088cc] text-xs bg-slate-50/50">
+        <input type="text" id="auth-username" placeholder="أدخل كودك الأكاديمي" class="w-full px-3 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-[#0088cc] text-xs bg-slate-50/50">
       </div>
 
       <div>
         <label class="block text-xs font-bold text-slate-700 mb-1">كلمة المرور (Password)</label>
-        <input type="password" id="reg-password" placeholder="••••••••" class="w-full px-3 py-2 rounded-xl border border-slate-300 focus:ring-2 focus:ring-[#0088cc] text-xs bg-slate-50/50">
+        <input type="password" id="auth-password" placeholder="••••••••" class="w-full px-3 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-[#0088cc] text-xs bg-slate-50/50">
       </div>
 
-      <button onclick="registerUser()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-3 rounded-xl font-bold shadow-lg transition text-xs">
-        إنشاء الحساب وقفل الجهاز 🔒
+      <button onclick="handleAuth()" class="w-full bg-[#0088cc] hover:bg-[#0077bb] text-white py-3.5 rounded-xl font-bold shadow-lg transition text-sm">
+        دخول وتسجيل الحساب 🚀
       </button>
 
       <div class="text-center pt-2 border-t mt-3">
-        <p class="text-xs text-slate-600">لديك حساب بالفعل؟ 
-          <button onclick="toggleRegisterMode(false)" class="text-[#0088cc] font-bold hover:underline">تسجيل الدخول</button>
-        </p>
+        <button onclick="resetDeviceData()" class="text-[11px] text-red-500 hover:underline">🗑️ مسح الذاكرة المسجلة (إعادة ضبط الجهاز)</button>
       </div>
     </div>
   </section>
@@ -288,108 +255,158 @@
     let attendanceList = JSON.parse(localStorage.getItem('egi_session_attendance') || '[]');
 
     function resetDeviceData() {
-      if (confirm("هل تريد حقاً مسح البيانات المخزنة على هذا الجهاز لإعادة تسجيل حساب جديد؟")) {
+      if (confirm("هل تريد حقاً مسح البيانات المخزنة لإعادة الضبط؟")) {
         localStorage.clear();
-        alert("تم مسح الذاكرة بنجاح. أعد تحميل الصفحة للتسجيل من جديد.");
+        alert("تم مسح الذاكرة بنجاح. أعد تحميل الصفحة.");
         location.reload();
       }
     }
 
-    function toggleRegisterMode(showRegister) {
-      if (showRegister) {
-        document.getElementById('panel-login').classList.add('hidden');
-        document.getElementById('panel-register').classList.remove('hidden');
-      } else {
-        document.getElementById('panel-register').classList.add('hidden');
-        document.getElementById('panel-login').classList.remove('hidden');
-      }
-    }
-
     function toggleRoleFields() {
-      const role = document.getElementById('reg-role').value;
-      const subField = document.getElementById('field-subject');
-      const studentFields = document.getElementById('student-extra-fields');
+      const role = document.getElementById('auth-role').value;
+      const studentFields = document.getElementById('student-fields');
+      const doctorFields = document.getElementById('doctor-fields');
       if (role === 'doctor') {
-        subField.classList.remove('hidden');
         studentFields.classList.add('hidden');
+        doctorFields.classList.remove('hidden');
       } else {
-        subField.classList.add('hidden');
         studentFields.classList.remove('hidden');
+        doctorFields.classList.add('hidden');
       }
     }
 
-    function registerUser() {
-      const role = document.getElementById('reg-role').value;
-      const name = document.getElementById('reg-fullname').value.trim();
-      const u = document.getElementById('reg-username').value.trim();
-      const p = document.getElementById('reg-password').value.trim();
-      const dept = document.getElementById('reg-dept').value;
-      const level = document.getElementById('reg-level').value;
-      const subject = document.getElementById('reg-subject').value.trim();
-
-      if (!name || !u || !p) {
-        alert("يرجى ملء جميع الحقول المطلوبة.");
-        return;
-      }
-
-      if (localStorage.getItem('egi_acc_' + u)) {
-        alert("❌ هذا الكود الأكاديمي مسجل مسبقاً لشخص آخر!");
-        return;
-      }
-
-      const newAccount = {
-        id: u,
-        password: p,
-        name: name,
-        role: role,
-        dept: dept || "هندسة الإلكترونيات والاتصالات",
-        level: level || "المستوى الثالث (3/2)",
-        subject: subject || "رياضيات 3 (Math 3)",
-        deviceId: currentDeviceId
-      };
-
-      localStorage.setItem('egi_acc_' + u, JSON.stringify(newAccount));
-      alert("🎉 تم إنشاء حسابك بنجاح وقفل جهازه يا بشمهندس " + name + "!");
-      
-      currentUser = newAccount;
-      userRole = role;
-      setupDashboard();
-    }
-
-    function loginUser() {
-      const u = document.getElementById('login-username').value.trim();
-      const p = document.getElementById('login-password').value.trim();
+    // دالة موحدة ذكية (تسجيل جديد أو دخول تلقائي بضغط زرار واحد)
+    function handleAuth() {
+      const role = document.getElementById('auth-role').value;
+      const name = document.getElementById('auth-fullname').value.trim();
+      const u = document.getElementById('auth-username').value.trim();
+      const p = document.getElementById('auth-password').value.trim();
+      const dept = document.getElementById('auth-dept').value;
+      const level = document.getElementById('auth-level').value;
+      const subject = document.getElementById('auth-subject').value.trim();
 
       if (!u || !p) {
         alert("يرجى إدخال الكود الأكاديمي وكلمة المرور.");
         return;
       }
 
-      const registeredData = localStorage.getItem('egi_acc_' + u);
+      const existingData = localStorage.getItem('egi_acc_' + u);
 
-      if (!registeredData) {
-        alert("❌ هذا الكود غير مسجل! يرجى إنشاء حساب جديد أولاً.");
-        return;
+      if (existingData) {
+        // الحساب موجود مسبقاً -> تحقق من الدخول
+        const accInfo = JSON.parse(existingData);
+        if (accInfo.password !== p) {
+          alert("❌ كلمة المرور غير صحيحة!");
+          return;
+        }
+        if (accInfo.deviceId !== currentDeviceId) {
+          alert("🔒 حظر أمني:\nهذا الحساب مقترن بجهاز هاتف آخر ولا يمكن فتحه إلا من الجهاز الأساسي المسجل به!");
+          return;
+        }
+        currentUser = accInfo;
+        userRole = accInfo.role;
+      } else {
+        // حساب جديد -> يتم إنشاؤه وقفله فوراً
+        if (!name) {
+          alert("يرجى كتابة الاسم الثلاثي أو الرباعي للتسجيل لأول مرة.");
+          return;
+        }
+        if (role === 'doctor' && !subject) {
+          alert("يرجى إدخال اسم المادة الدراسية.");
+          return;
+        }
+
+        const newAccount = {
+          id: u,
+          password: p,
+          name: name,
+          role: role,
+          dept: dept || "هندسة الإلكترونيات والاتصالات",
+          level: level || "المستوى الثالث (3/2)",
+          subject: subject || "رياضيات 3 (Math 3)",
+          deviceId: currentDeviceId
+        };
+
+        localStorage.setItem('egi_acc_' + u, JSON.stringify(newAccount));
+        currentUser = newAccount;
+        userRole = role;
+        alert("🎉 تم إنشاء حسابك وقفل جهازه بنجاح يا بشمهندس " + name + "!");
       }
 
-      const accInfo = JSON.parse(registeredData);
-
-      if (accInfo.password !== p) {
-        alert("❌ كلمة المرور غير صحيحة!");
-        return;
-      }
-
-      if (accInfo.deviceId !== currentDeviceId) {
-        alert("🔒 حظر أمني:\nهذا الحساب مقترن بجهاز هاتف آخر ولا يمكن فتحه إلا من الجهاز الذي تم إنشاء الحساب منه!");
-        return;
-      }
-
-      currentUser = accInfo;
-      userRole = accInfo.role;
       setupDashboard();
     }
 
     function setupDashboard() {
-      document.getElementById('panel-login').classList.add('hidden');
-      document.getElementById('panel-register').classList.add('hidden');
+      document.getElementById('panel-auth').classList.add('hidden');
       document.getElementById('panel-dashboard').classList.remove('hidden');
+
+      if (userRole === 'doctor') {
+        document.getElementById('user-display').innerText = currentUser.name + " (" + currentUser.subject + ")";
+        document.getElementById('doc-fullname').innerText = "شاشة الدكتور: " + currentUser.name;
+        document.getElementById('doc-subject').innerText = currentUser.subject;
+        switchView('doctor');
+        updateAttendanceCount();
+      } else {
+        document.getElementById('user-display').innerText = currentUser.name;
+        document.getElementById('st-fullname').value = currentUser.name;
+        document.getElementById('st-id').value = currentUser.id;
+        document.getElementById('st-dept').value = currentUser.dept;
+        document.getElementById('st-level').value = currentUser.level;
+        switchView('student');
+      }
+    }
+
+    function logoutUser() {
+      document.getElementById('panel-dashboard').classList.add('hidden');
+      document.getElementById('panel-auth').classList.remove('hidden');
+      stopCamera();
+      currentUser = null;
+      userRole = null;
+    }
+
+    function switchView(viewId) {
+      document.getElementById('view-student').classList.add('hidden');
+      document.getElementById('view-doctor').classList.add('hidden');
+      document.getElementById('view-' + viewId).classList.remove('hidden');
+
+      if (viewId === 'doctor') {
+        initQR();
+      }
+    }
+
+    function initQR() {
+      const qrel = document.getElementById("qrcode");
+      qrel.innerHTML = "";
+      qrGenerator = new QRCode(qrel, {
+        text: "https://abdogoda123.github.io/jazeera-attendance-system/?code=" + Math.random(),
+        width: 160,
+        height: 160
+      });
+    }
+
+    function startCamera() {
+      document.getElementById('scanner-container').classList.remove('hidden');
+      document.getElementById('btn-open-camera').classList.add('hidden');
+
+      html5QrCode = new Html5Qrcode("reader");
+      html5QrCode.start(
+        { facingMode: "environment" },
+        { fps: 10, qrbox: { width: 220, height: 220 } },
+        (decodedText, decodedResult) => {
+          stopCamera();
+          recordAttendance();
+        },
+        (errorMessage) => {}
+      ).catch(err => {
+        alert("⚠️ تعذر فتح الكاميرا: يرجى السماح للمتصفح بالوصول للكاميرا من إعدادات الهاتف.");
+        stopCamera();
+      });
+    }
+
+    function stopCamera() {
+      if (html5QrCode) {
+        html5QrCode.stop().then(() => {
+          html5QrCode.clear();
+        }).catch(err => {});
+      }
+      document.getElementById('scanner-container').classList.add('hidden')
