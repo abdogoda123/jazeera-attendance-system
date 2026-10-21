@@ -28,35 +28,35 @@
     
     <div class="bg-gradient-to-r from-[#0088cc] to-[#005580] text-white py-2.5 px-6 rounded-xl shadow-inner flex justify-between items-center text-sm">
       <h2 class="font-bold tracking-wide">SMART ATTENDANCE SYSTEM - نظام الحضور الذكي</h2>
-      <span id="user-display" class="bg-white/20 px-3 py-1 rounded-lg text-xs font-semibold">بوابة الدخول الموحدة</span>
+      <span id="user-display" class="bg-white/20 px-3 py-1 rounded-lg text-xs font-semibold">بوابة التسجيل الموحدة</span>
     </div>
   </header>
 
-  <!-- CLEAN OFFICIAL LOGIN PANEL -->
+  <!-- LOGIN & REGISTRATION PANEL -->
   <section id="panel-login" class="max-w-md mx-auto bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl p-6 md:p-8 border border-white">
     <div class="text-center mb-6">
       <div class="inline-block p-3 bg-blue-50 text-[#0088cc] rounded-full mb-2 text-2xl shadow-inner">🔐</div>
       <h3 class="text-xl font-bold text-slate-800">تسجيل الدخول للنظام الأكاديمي</h3>
-      <p class="text-xs text-slate-500 mt-1">الرجاء إدخال بيانات حسابك الأكاديمي المقترن بجهازك</p>
+      <p class="text-xs text-slate-500 mt-1">يُربط الكود باسمك وجهازك نهائياً عند الدخول أول مرة</p>
     </div>
     
     <div class="space-y-4">
       <div>
-        <label class="block text-xs font-bold text-slate-700 mb-1">الكود الأكاديمي / اسم المستخدم</label>
-        <input type="text" id="login-username" placeholder="أدخل الكود الخاص بك" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-[#0088cc] text-sm bg-slate-50/50">
+        <label class="block text-xs font-bold text-slate-700 mb-1">الكود الأكاديمي (دفعة 2021: 20211-300 | دفعة 2627: 26271-600)</label>
+        <input type="text" id="login-username" placeholder="أدخل الكود الأكاديمي (مثال: 26271 أو 20211)" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-[#0088cc] text-sm bg-slate-50/50">
       </div>
       <div>
-        <label class="block text-xs font-bold text-slate-700 mb-1">كلمة المرور (Password)</label>
+        <label class="block text-xs font-bold text-slate-700 mb-1">كلمة المرور المخصصة (Password)</label>
         <input type="password" id="login-password" placeholder="••••••••" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-[#0088cc] text-sm bg-slate-50/50">
       </div>
 
       <div>
         <label class="block text-xs font-bold text-slate-700 mb-1">الاسم الثلاثي / الرباعي الرسمي</label>
-        <input type="text" id="login-fullname" placeholder="اكتب اسمك كاملاً" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-[#0088cc] text-sm bg-slate-50/50">
+        <input type="text" id="login-fullname" placeholder="اكتب اسمك كاملاً لربطه بحسابك" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-[#0088cc] text-sm bg-slate-50/50">
       </div>
 
       <button onclick="loginUser()" class="w-full bg-[#0088cc] hover:bg-[#0077bb] text-white py-3.5 rounded-xl font-bold shadow-lg transition text-sm">
-        دخول النظام 🚀
+        دخول وتسجيل الحساب 🚀
       </button>
     </div>
   </section>
@@ -76,7 +76,7 @@
         <span class="text-2xl">👤</span>
         <div>
           <h3 class="text-lg font-bold text-slate-800">تسجيل حضور الطالب</h3>
-          <p class="text-xs text-slate-500">معهد الجزيرة العالي للهندسة والتكنولوجيا - رؤية مصر 2030 للتحول الرقمي</p>
+          <p class="text-xs text-slate-500">معهد الجزيرة العالي للهندسة والتكنولوجيا</p>
         </div>
       </div>
 
@@ -88,12 +88,12 @@
 
         <div class="grid grid-cols-2 gap-4">
           <div>
-            <label class="block text-xs font-bold text-slate-700 mb-1">الكود الأكاديمي المقترن بالجهاز</label>
+            <label class="block text-xs font-bold text-slate-700 mb-1">الكود الأكاديمي المربوط للجهاز</label>
             <input type="text" id="st-id" class="w-full px-4 py-2.5 rounded-xl border bg-slate-50 text-slate-800 font-mono font-bold text-sm" readonly>
           </div>
           <div>
-            <label class="block text-xs font-bold text-slate-700 mb-1">المستوى الدراسي</label>
-            <input type="text" id="st-level" value="المستوى الثالث (3/2)" class="w-full px-4 py-2.5 rounded-xl border bg-slate-50 text-slate-800 font-bold text-sm" readonly>
+            <label class="block text-xs font-bold text-slate-700 mb-1">الدفعة الأكاديمية</label>
+            <input type="text" id="st-batch" class="w-full px-4 py-2.5 rounded-xl border bg-slate-50 text-slate-800 font-bold text-sm" readonly>
           </div>
         </div>
 
@@ -163,25 +163,66 @@
       const p = document.getElementById('login-password').value.trim();
       const inputName = document.getElementById('login-fullname').value.trim();
 
-      if (!u || !p || !inputName) {
-        alert("يرجى إدخال الكود الأكاديمي، كلمة المرور، واسمك الكامل.");
+      if (!u || !p) {
+        alert("يرجى إدخال الكود الأكاديمي وكلمة المرور.");
         return;
       }
 
-      const lockedDevice = localStorage.getItem('lock_account_' + u);
-      if (lockedDevice && lockedDevice !== currentDeviceId) {
-        alert("🔒 تنبيه أمني:\nهذا الحساب مقترن بجهاز هاتف آخر بالفعل ولا يمكن الدخول إليه من جهاز جديد.");
-        return;
-      }
+      // التحقق مما إذا كان الكود مسجلاً مسبقاً
+      const registeredData = localStorage.getItem('egi_acc_' + u);
 
-      localStorage.setItem('lock_account_' + u, currentDeviceId);
+      if (registeredData) {
+        const accInfo = JSON.parse(registeredData);
 
-      if (u.startsWith("2030") || u.startsWith("dr")) {
-        userRole = 'doctor';
-        currentUser = { id: u, name: inputName };
+        // التحقق من كلمة المرور
+        if (accInfo.password !== p) {
+          alert("❌ كلمة المرور غير صحيحة لهذا الحساب!");
+          return;
+        }
+
+        // قفل الحساب على جهاز واحد
+        if (accInfo.deviceId !== currentDeviceId) {
+          alert("🔒 حظر أمني:\nهذا الحساب مقترن بجهاز هاتف آخر ولا يمكن الدخول منه إلا من جهاز الهاتف المسجل لأول مرة!");
+          return;
+        }
+
+        currentUser = accInfo;
+        userRole = accInfo.role;
       } else {
-        userRole = 'student';
-        currentUser = { id: u, name: inputName };
+        // تسجيل جديد لأول مرة
+        if (!inputName) {
+          alert("الرجاء كتابة اسمك الكامل ليتم ربطه بهذا الكود وكلمة المرور نهائياً!");
+          return;
+        }
+
+        let batchName = "دفعة عامة";
+        let role = 'student';
+
+        if (u.startsWith("2021")) {
+          batchName = "دفعة 2020 / 2021";
+          role = 'student';
+        } else if (u.startsWith("2627")) {
+          batchName = "دفعة 2026 / 2027 (سعة 600 طالب)";
+          role = 'student';
+        } else if (u.startsWith("2030") || u.startsWith("dr")) {
+          batchName = "عضو هيئة التدريس";
+          role = 'doctor';
+        }
+
+        const newAccount = {
+          id: u,
+          password: p,
+          name: inputName,
+          batch: batchName,
+          deviceId: currentDeviceId,
+          role: role
+        };
+
+        localStorage.setItem('egi_acc_' + u, JSON.stringify(newAccount));
+        currentUser = newAccount;
+        userRole = role;
+
+        alert("🎉 تم تسجيل وتأمين الحساب بنجاح لـ (" + inputName + ")!\nالكود مقترن الآن بجهازك وبكلمة المرور هذه نهائياً.");
       }
 
       setupDashboard();
@@ -200,6 +241,7 @@
         document.getElementById('user-display').innerText = currentUser.name;
         document.getElementById('st-fullname').value = currentUser.name;
         document.getElementById('st-id').value = currentUser.id;
+        document.getElementById('st-batch').value = currentUser.batch;
         switchView('student');
       }
     }
