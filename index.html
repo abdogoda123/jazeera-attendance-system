@@ -32,32 +32,82 @@
     </div>
   </header>
 
-  <!-- CLEAN OFFICIAL LOGIN PANEL -->
+  <!-- 1. LOGIN PANEL -->
   <section id="panel-login" class="max-w-md mx-auto bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl p-6 md:p-8 border border-white">
     <div class="text-center mb-6">
       <div class="inline-block p-3 bg-blue-50 text-[#0088cc] rounded-full mb-2 text-2xl shadow-inner">🔐</div>
       <h3 class="text-xl font-bold text-slate-800">تسجيل الدخول للنظام الأكاديمي</h3>
-      <p class="text-xs text-slate-500 mt-1">يربط الكود باسمك وجهازك نهائياً عند الدخول لأول مرة</p>
+      <p class="text-xs text-slate-500 mt-1">أدخل كودك الأكاديمي وكلمة المرور الخاصة بك</p>
     </div>
     
     <div class="space-y-4">
       <div>
-        <label class="block text-xs font-bold text-slate-700 mb-1">الكود الأكاديمي</label>
-        <input type="text" id="login-username" placeholder="أدخل الكود الأكاديمي" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-[#0088cc] text-sm bg-slate-50/50">
+        <label class="block text-xs font-bold text-slate-700 mb-1">الكود الأكاديمي / اسم المستخدم</label>
+        <input type="text" id="login-username" placeholder="أدخل الكود الخاص بك" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-[#0088cc] text-sm bg-slate-50/50">
       </div>
       <div>
-        <label class="block text-xs font-bold text-slate-700 mb-1">كلمة المرور المخصصة (Password)</label>
+        <label class="block text-xs font-bold text-slate-700 mb-1">كلمة المرور (Password)</label>
         <input type="password" id="login-password" placeholder="••••••••" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-[#0088cc] text-sm bg-slate-50/50">
+      </div>
+
+      <button onclick="loginUser()" class="w-full bg-[#0088cc] hover:bg-[#0077bb] text-white py-3.5 rounded-xl font-bold shadow-lg transition text-sm">
+        تسجيل الدخول 🚀
+      </button>
+
+      <div class="text-center pt-3 border-t mt-4">
+        <p class="text-xs text-slate-600">ليس لديك حساب على هذا الهاتف؟ 
+          <button onclick="toggleRegisterMode(true)" class="text-[#0088cc] font-bold hover:underline">انشئ حسابك الجديد الآن</button>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. REGISTER PANEL (SELF-SERVICE) -->
+  <section id="panel-register" class="max-w-md mx-auto bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl p-6 md:p-8 border border-white hidden">
+    <div class="text-center mb-6">
+      <div class="inline-block p-3 bg-emerald-50 text-emerald-600 rounded-full mb-2 text-2xl shadow-inner">📝</div>
+      <h3 class="text-xl font-bold text-slate-800">إنشاء حساب جديد (تسجيل لأول مرة)</h3>
+      <p class="text-xs text-slate-500 mt-1">سيتم ربط هذا الحساب باسمك وجهازك نهائياً</p>
+    </div>
+    
+    <div class="space-y-4">
+      <div>
+        <label class="block text-xs font-bold text-slate-700 mb-1">حدد صفحتك / صفتك</label>
+        <select id="reg-role" onchange="toggleRoleFields()" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-[#0088cc] text-sm bg-slate-50/50">
+          <option value="student">طالب (منظومة الحضور للدفعة)</option>
+          <option value="doctor">عضو هيئة تدريس / دكتور</option>
+        </select>
       </div>
 
       <div>
         <label class="block text-xs font-bold text-slate-700 mb-1">الاسم الثلاثي / الرباعي الرسمي</label>
-        <input type="text" id="login-fullname" placeholder="اكتب اسمك كاملاً" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-[#0088cc] text-sm bg-slate-50/50">
+        <input type="text" id="reg-fullname" placeholder="اكتب اسمك كاملاً" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-[#0088cc] text-sm bg-slate-50/50">
       </div>
 
-      <button onclick="loginUser()" class="w-full bg-[#0088cc] hover:bg-[#0077bb] text-white py-3.5 rounded-xl font-bold shadow-lg transition text-sm">
-        دخول وتسجيل الحساب 🚀
+      <div id="field-subject" class="hidden">
+        <label class="block text-xs font-bold text-slate-700 mb-1">اسم المادة الدراسية (للدكتور)</label>
+        <input type="text" id="reg-subject" placeholder="مثال: تحليل متجهات / خرسانة مسلحة" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-[#0088cc] text-sm bg-slate-50/50">
+      </div>
+
+      <div>
+        <label class="block text-xs font-bold text-slate-700 mb-1">اختر كود أكاديمي خاص بك (ID)</label>
+        <input type="text" id="reg-username" placeholder="مثال: 26271 أو أي كود تختاره" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-[#0088cc] text-sm bg-slate-50/50">
+      </div>
+
+      <div>
+        <label class="block text-xs font-bold text-slate-700 mb-1">أنشئ كلمة مرور خاصة بك (Password)</label>
+        <input type="password" id="reg-password" placeholder="••••••••" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-[#0088cc] text-sm bg-slate-50/50">
+      </div>
+
+      <button onclick="registerUser()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-3.5 rounded-xl font-bold shadow-lg transition text-sm">
+        إنشاء الحساب وقفل الجهاز 🔒
       </button>
+
+      <div class="text-center pt-3 border-t mt-4">
+        <p class="text-xs text-slate-600">لديك حساب بالفعل؟ 
+          <button onclick="toggleRegisterMode(false)" class="text-[#0088cc] font-bold hover:underline">تسجيل الدخول</button>
+        </p>
+      </div>
     </div>
   </section>
 
@@ -128,8 +178,8 @@
 
       <div class="grid grid-cols-2 gap-4 mb-6">
         <div class="bg-blue-50 border border-blue-200 p-4 rounded-xl text-center">
-          <span class="text-xs text-slate-500 font-bold block mb-1">كود الدكتور الأكاديمي</span>
-          <span class="text-sm font-extrabold text-[#0088cc]" id="doc-code">--</span>
+          <span class="text-xs text-slate-500 font-bold block mb-1">المادة الدراسية</span>
+          <span class="text-sm font-extrabold text-[#0088cc]" id="doc-subject">--</span>
         </div>
         <div class="bg-green-50 border border-green-200 p-4 rounded-xl text-center">
           <span class="text-xs text-slate-500 font-bold block mb-1">إجمالي الحاضرين</span>
@@ -158,10 +208,73 @@
     let userRole = null;
     let qrGenerator = null;
 
+    function toggleRegisterMode(showRegister) {
+      if (showRegister) {
+        document.getElementById('panel-login').classList.add('hidden');
+        document.getElementById('panel-register').classList.remove('hidden');
+      } else {
+        document.getElementById('panel-register').classList.add('hidden');
+        document.getElementById('panel-login').classList.remove('hidden');
+      }
+    }
+
+    function toggleRoleFields() {
+      const role = document.getElementById('reg-role').value;
+      const subField = document.getElementById('field-subject');
+      if (role === 'doctor') {
+        subField.classList.remove('hidden');
+      } else {
+        subField.classList.add('hidden');
+      }
+    }
+
+    // تسجيل حساب جديد بنفسه
+    function registerUser() {
+      const role = document.getElementById('reg-role').value;
+      const name = document.getElementById('reg-fullname').value.trim();
+      const u = document.getElementById('reg-username').value.trim();
+      const p = document.getElementById('reg-password').value.trim();
+      const subject = document.getElementById('reg-subject').value.trim();
+
+      if (!name || !u || !p) {
+        alert("يرجى ملء جميع الحقول المطلوبة لإنشاء الحساب.");
+        return;
+      }
+
+      if (role === 'doctor' && !subject) {
+        alert("يرجى كتابة اسم المادة الدراسية الخاصة بك.");
+        return;
+      }
+
+      // التأكد أن الكود مش مستخدم قبل كده
+      if (localStorage.getItem('egi_acc_' + u)) {
+        alert("❌ هذا الكود الأكاديمي مستخدم مسبقاً! اختر كوداً آخر.");
+        return;
+      }
+
+      const newAccount = {
+        id: u,
+        password: p,
+        name: name,
+        role: role,
+        subject: subject || "مادة أكاديمية",
+        deviceId: currentDeviceId
+      };
+
+      // حفظ الحساب بشكل دائم ومقفل على الجهاز
+      localStorage.setItem('egi_acc_' + u, JSON.stringify(newAccount));
+      
+      alert("🎉 تم إنشاء حسابك بنجاح وقفله على هاتفك الحالي يا بشمهندس " + name + "!");
+      
+      currentUser = newAccount;
+      userRole = role;
+      setupDashboard();
+    }
+
+    // تسجيل الدخول العادي
     function loginUser() {
       const u = document.getElementById('login-username').value.trim();
       const p = document.getElementById('login-password').value.trim();
-      const inputName = document.getElementById('login-fullname').value.trim();
 
       if (!u || !p) {
         alert("يرجى إدخال الكود الأكاديمي وكلمة المرور.");
@@ -170,55 +283,37 @@
 
       const registeredData = localStorage.getItem('egi_acc_' + u);
 
-      if (registeredData) {
-        const accInfo = JSON.parse(registeredData);
-
-        if (accInfo.password !== p) {
-          alert("❌ كلمة المرور غير صحيحة لهذا الحساب!");
-          return;
-        }
-
-        if (accInfo.deviceId !== currentDeviceId) {
-          alert("🔒 حظر أمني:\nهذا الحساب مقترن بجهاز هاتف آخر ولا يمكن الدخول منه إلا من جهاز الهاتف المسجل لأول مرة!");
-          return;
-        }
-
-        currentUser = accInfo;
-        userRole = accInfo.role;
-      } else {
-        if (!inputName) {
-          alert("الرجاء كتابة اسمك الكامل ليتم ربطه بهذا الكود وكلمة المرور نهائياً!");
-          return;
-        }
-
-        let role = (u.startsWith("2030") || u.startsWith("dr")) ? 'doctor' : 'student';
-
-        const newAccount = {
-          id: u,
-          password: p,
-          name: inputName,
-          deviceId: currentDeviceId,
-          role: role
-        };
-
-        localStorage.setItem('egi_acc_' + u, JSON.stringify(newAccount));
-        currentUser = newAccount;
-        userRole = role;
-
-        alert("🎉 تم تسجيل وتأمين الحساب بنجاح لـ (" + inputName + ")!\nالكود مقترن الآن بجهازك وبكلمة المرور هذه نهائياً.");
+      if (!registeredData) {
+        alert("❌ هذا الكود غير مسجل على النظام! يرجى إنشاء حساب جديد أولاً.");
+        return;
       }
 
+      const accInfo = JSON.parse(registeredData);
+
+      if (accInfo.password !== p) {
+        alert("❌ كلمة المرور غير صحيحة!");
+        return;
+      }
+
+      if (accInfo.deviceId !== currentDeviceId) {
+        alert("🔒 حظر أمني:\nهذا الحساب مقترن بجهاز هاتف آخر ولا يمكن فتحه إلا من الجهاز الذي تم إنشاء الحساب منه!");
+        return;
+      }
+
+      currentUser = accInfo;
+      userRole = accInfo.role;
       setupDashboard();
     }
 
     function setupDashboard() {
       document.getElementById('panel-login').classList.add('hidden');
+      document.getElementById('panel-register').classList.add('hidden');
       document.getElementById('panel-dashboard').classList.remove('hidden');
 
       if (userRole === 'doctor') {
-        document.getElementById('user-display').innerText = currentUser.name + " (" + currentUser.id + ")";
+        document.getElementById('user-display').innerText = currentUser.name + " (" + currentUser.subject + ")";
         document.getElementById('doc-fullname').innerText = "شاشة الدكتور: " + currentUser.name;
-        document.getElementById('doc-code').innerText = currentUser.id;
+        document.getElementById('doc-subject').innerText = currentUser.subject;
         switchView('doctor');
       } else {
         document.getElementById('user-display').innerText = currentUser.name;
